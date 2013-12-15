@@ -33,9 +33,9 @@ for c_i = 1:size(C_values, 1)
 		model= svmTrain(X, y, c_cur, @(x1, x2) gaussianKernel(x1, x2, s_cur));
 		predictions = svmPredict(model, Xval);
 		err = mean(double(predictions ~= yval));
-		fprintf(['C: %f\tsignma: %f\terror: %f\n'], c_cur, s_cur, err)
-		if (err < smallest_error),
-			smallest_error = err;
+		fprintf(['C: %f\tsignma: %f\terror: %f\n'], c_cur, s_cur, err);
+		if (err < smallest_err),
+			smallest_err = err;
 			C = c_cur;
 			sigma = s_cur;
 		endif
