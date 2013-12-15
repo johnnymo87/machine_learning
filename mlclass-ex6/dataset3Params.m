@@ -26,9 +26,9 @@ C_values     = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 sigma_values = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 smallest_err = 1000000000;
 
-for c_i = 1:size(C_values, 1)
+for c_i = 1:size(C_values, 2)
 	c_cur = C_values(c_i);
-	for s_i = 1:size(sigma_values, 1)
+	for s_i = 1:size(sigma_values, 2)
 		s_cur = sigma_values(s_i);
 		model= svmTrain(X, y, c_cur, @(x1, x2) gaussianKernel(x1, x2, s_cur));
 		predictions = svmPredict(model, Xval);
