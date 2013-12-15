@@ -8,8 +8,8 @@ function [C, sigma] = dataset3Params(X, y, Xval, yval)
 %
 
 % You need to return the following variables correctly.
-C     = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
-sigma = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+C = 1;
+sigma = 0.3;
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Fill in this function to return the optimal C and sigma
@@ -22,24 +22,25 @@ sigma = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
 %  Note: You can compute the prediction error using 
 %        mean(double(predictions ~= yval))
 %
-[idx2, idx1] = find(true(numel(C), numel(sigma)));
-pairs = [reshape(C(idx1), [], 1), reshape(sigma(idx2), [], 1)];
-predicts = [zeros(size(pairs,1),3)];
-for i = 1:pairs
-	keyboard();
-	C = pairs(i)(1) ; sigma = pairs(i)(2);
-	keyboard();
-	model= svmTrain(X, y, C, @(x1, x2) gaussianKernel(x1, x2, sigma));
-	keyboard();
-	predictions = svmPredict(model, Xval);
-	keyboard();
-	err = mean(double(predictions ~= yval));
-	predict(i) = [C Sigma err];
-	keyboard();
-	fprintf(['C: %f\tsignma: %f\terror: %f\n'], C, sigma, err)
+C_values     = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+sigma_values = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+smallest_err = 1000000000;
+
+for c_i = 1:size(C_values, 1)
+	c_cur = C_values(c_i);
+	for s_i = 1:size(sigma_values, 1)
+		s_cur = sigma_values(s_i);
+		model= svmTrain(X, y, c_cur, @(x1, x2) gaussianKernel(x1, x2, s_cur));
+		predictions = svmPredict(model, Xval);
+		err = mean(double(predictions ~= yval));
+		fprintf(['C: %f\tsignma: %f\terror: %f\n'], c_cur, s_cur, err)
+		if (err < smallest_error),
+			smallest_error = err;
+			C = c_cur;
+			sigma = s_cur;
+		endif
+	endfor
 endfor
-
-
 
 
 % =========================================================================
